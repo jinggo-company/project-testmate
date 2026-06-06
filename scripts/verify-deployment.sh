@@ -1,6 +1,11 @@
 #!/bin/bash
 # verify-deployment.sh — Verify TestMate deployment
-set -euo pipefail
+set -uo pipefail
+
+# Ensure maestro and java are in PATH
+export PATH="$PATH:$HOME/.maestro/bin"
+[ -d "$HOME/.local/java" ] && export JAVA_HOME=$(ls -d $HOME/.local/java/jdk-* 2>/dev/null | head -1)
+[ -n "${JAVA_HOME:-}" ] && export PATH="$JAVA_HOME/bin:$PATH"
 
 PASS=0
 FAIL=0
@@ -10,10 +15,10 @@ check() {
   shift
   if eval "$@"; then
     echo "[PASS] $desc"
-    ((PASS++))
+    PASS=$((PASS+1))
   else
     echo "[FAIL] $desc"
-    ((FAIL++))
+    FAIL=$((FAIL+1))
   fi
 }
 
