@@ -1,0 +1,17 @@
+# Ecommerce: Login Flow
+# 电商 - 用户登录流程
+
+appId: com.ecommerce.app
+---
+- launchApp
+- tapOn: "登录/注册"
+- assertVisible: "手机号登录"
+- tapOn: "请输入手机号"
+- inputText: "13800138000"
+- tapOn: "获取验证码"
+- assertVisible: "请输入验证码"
+- tapOn: "请输入验证码"
+- inputText: "123456"
+- tapOn: "登录"
+- assertVisible: "首页"
+- takeScreenshot: login-success

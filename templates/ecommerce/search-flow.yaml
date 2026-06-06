@@ -1,0 +1,14 @@
+# Ecommerce: Search Flow
+# 电商 - 搜索商品流程
+
+appId: com.ecommerce.app
+---
+- launchApp
+- tapOn: "搜索"
+- assertVisible: "搜索商品"
+- tapOn: "搜索框"
+- inputText: "手机"
+- tapOn: "搜索"
+- assertVisible: "搜索结果"
+- scroll
+- takeScreenshot: search-results

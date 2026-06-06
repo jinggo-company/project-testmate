@@ -1,0 +1,9 @@
+# sample-flow.yaml — TestMate 示例测试流
+# 用途：验证 Maestro 测试流基本语法
+
+appId: com.example.sample
+---
+- launchApp
+- tapOn: "Welcome"
+- assertVisible: "Welcome to the app"
+- takeScreenshot: welcome-screen

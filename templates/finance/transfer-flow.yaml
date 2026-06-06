@@ -1,0 +1,15 @@
+# Finance: Transfer Flow
+# 金融 - 转账流程
+
+appId: com.finance.app
+---
+- launchApp
+- tapOn: "转账"
+- assertVisible: "收款人"
+- tapOn: "收款人账号"
+- inputText: "6222000000001234567"
+- tapOn: "金额"
+- inputText: "100.00"
+- tapOn: "确认转账"
+- assertVisible: "转账成功"
+- takeScreenshot: transfer-success

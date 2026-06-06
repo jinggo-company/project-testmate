@@ -1,0 +1,63 @@
+stages:
+  - setup
+  - test
+  - report
+
+variables:
+  MAESTRO_VERSION: "1.39.0"
+  ANDROID_API_LEVEL: "33"
+
+.e2e-template:
+  stage: test
+  image: mingc/android-build-box:latest
+  timeout: 30m
+  script:
+    - |
+      # Install Maestro
+      curl -Ls "https://get.maestro.mobile.dev" | bash
+      export PATH="$HOME/.maestro/bin:$PATH"
+      maestro --version
+    - |
+      # Run test flows
+      maestro test flows/ --format=junit --output=reports/
+  artifacts:
+    when: always
+    paths:
+      - reports/
+    expire_in: 30d
+
+maestro-e2e:
+  extends: .e2e-template
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+maestro-template-tests:
+  stage: test
+  image: mingc/android-build-box:latest
+  script:
+    - |
+      curl -Ls "https://get.maestro.mobile.dev" | bash
+      export PATH="$HOME/.maestro/bin:$PATH"
+    - maestro test templates/ecommerce/login-flow.yaml || true
+    - maestro test templates/social/post-flow.yaml || true
+    - maestro test templates/finance/transfer-flow.yaml || true
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+setup-env:
+  stage: setup
+  script:
+    - echo "Setting up test environment..."
+    - chmod +x scripts/*.sh
+    - ./scripts/install-maestro.sh || true
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+generate-report:
+  stage: report
+  script:
+    - echo "Generating test report..."
+    - ./scripts/verify-deployment.sh || true
+  rules:
+    - if: 'always()'

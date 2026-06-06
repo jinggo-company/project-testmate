@@ -1,0 +1,16 @@
+# Finance: Statement Flow
+# 金融 - 查询流水流程
+
+appId: com.finance.app
+---
+- launchApp
+- tapOn: "账户明细"
+- assertVisible: "交易记录"
+- scroll
+- scroll
+- assertVisible: "筛选"
+- tapOn: "筛选"
+- tapOn: "最近7天"
+- tapOn: "确定"
+- assertVisible: "筛选结果"
+- takeScreenshot: statement-results

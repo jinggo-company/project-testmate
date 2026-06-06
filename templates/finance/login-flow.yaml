@@ -1,0 +1,18 @@
+# Finance: Login Flow
+# 金融 - 安全登录流程
+
+appId: com.finance.app
+---
+- launchApp
+- assertVisible: "登录"
+- tapOn: "账号"
+- inputText: "finance_user"
+- tapOn: "密码"
+- inputText: "SecureP@ss123"
+- tapOn: "登录"
+- assertVisible: "安全验证"
+- tapOn: "短信验证码"
+- inputText: "888888"
+- tapOn: "验证"
+- assertVisible: "我的资产"
+- takeScreenshot: finance-login

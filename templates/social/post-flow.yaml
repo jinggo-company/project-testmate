@@ -1,0 +1,13 @@
+# Social: Post Flow
+# 社交 - 发布内容流程
+
+appId: com.social.app
+---
+- launchApp
+- tapOn: "+"
+- assertVisible: "发布动态"
+- tapOn: "输入内容"
+- inputText: "这是一条测试动态"
+- tapOn: "发布"
+- assertVisible: "发布成功"
+- takeScreenshot: post-success

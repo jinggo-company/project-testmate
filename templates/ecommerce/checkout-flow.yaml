@@ -1,0 +1,13 @@
+# Ecommerce: Checkout Flow
+# 电商 - 下单结算流程
+
+appId: com.ecommerce.app
+---
+- launchApp
+- tapOn: "购物车"
+- assertVisible: "去结算"
+- tapOn: "去结算"
+- assertVisible: "确认订单"
+- tapOn: "提交订单"
+- assertVisible: "支付成功"
+- takeScreenshot: checkout-success

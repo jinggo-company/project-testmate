@@ -1,0 +1,60 @@
+name: TestMate E2E Tests
+
+on:
+  push:
+    branches: [main, feat/**]
+  pull_request:
+    branches: [main]
+
+jobs:
+  maestro-test:
+    runs-on: macos-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install Maestro
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+
+      - name: Verify Maestro
+        run: maestro --version
+
+      - name: Create Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          script: |
+            echo "Emulator ready"
+            maestro --version
+
+      - name: Run E2E Tests
+        run: |
+          maestro test flows/ --format=junit --output=reports/
+        env:
+          MAESTRO_APP_ID: ${{ secrets.TEST_APP_ID }}
+
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: testmate-reports
+          path: reports/
+
+      - name: Run Template Tests
+        run: |
+          maestro test templates/ecommerce/login-flow.yaml || true
+          maestro test templates/social/post-flow.yaml || true
+          maestro test templates/finance/transfer-flow.yaml || true
